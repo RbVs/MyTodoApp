@@ -9,5 +9,6 @@ namespace MyTodoApp.Models
         public DateTime DateAdded { get; set; }
         public DateTime DueDate { get; set; }
         public int Priority { get; set; }
+        public bool IsClosed { get; set; }
     }
 }

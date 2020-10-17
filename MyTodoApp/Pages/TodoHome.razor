@@ -1,0 +1,46 @@
+﻿@page "/todo-home"
+@using MyTodoApp.Models
+@using Syncfusion.Blazor.Grids
+
+<div class="row">
+    <div class="col-md-2">
+        <p>Listen</p>
+    </div>
+    <div class="col-md-7">
+        <SfGrid DataSource="@Todos" AllowPaging="true" AllowFiltering="true" EnableHover="true">
+            <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
+            <GridColumns>
+                <GridColumn Field="@nameof(Todo.Id)" HeaderText="Id"></GridColumn>
+                <GridColumn Field="@nameof(Todo.Description)" HeaderText="Description"></GridColumn>
+                <GridColumn Field="@nameof(Todo.DateAdded)" HeaderText="Date added"></GridColumn>
+                <GridColumn Field="@nameof(Todo.DueDate)" HeaderText="Due date"></GridColumn>
+                <GridColumn Field="@nameof(Todo.Priority)" HeaderText="Priority"></GridColumn>
+                <GridColumn Field="@nameof(Todo.IsClosed)" HeaderText="Offen" DisplayAsCheckBox="true"></GridColumn>
+            </GridColumns>
+        </SfGrid>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+
+@code{
+    private List<Todo> Todos { get; } = new List<Todo>();
+
+    protected override void OnInitialized()
+    {
+        for (var i = 1; i <= 100; i++)
+        {
+            Todos.Add(new Todo
+            {
+                Id = i,
+                Description = $"My Todo Nr. : {i}",
+                DateAdded = DateTime.Today.AddDays(-i),
+                DueDate = DateTime.Today.AddDays(i),
+                Priority = 1,
+                IsClosed = false
+            });
+        }
+        base.OnInitialized();
+    }
+
+}
