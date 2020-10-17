@@ -1,0 +1,28 @@
+﻿@using MyTodoApp.Models
+
+<div>
+    <label margin="0 0 0 10px">Task Id:</label>
+    <label >@Todo.Id</label>
+</div>
+<div>
+    <label margin="0 0 0 10px">Priopity:</label>
+    <label >@Todo.Priority</label>
+</div>
+<div>
+    <label margin="0 0 0 10px">Description:</label>
+    <label >@Todo.Description</label>
+</div>
+<div>
+    <label margin="0 0 0 10px">Date added:</label>
+    <label>@Todo.DateAdded</label>
+</div>
+<div>
+    <label margin="0 0 0 10px">Due date:</label>
+    <label >@Todo.DueDate</label>
+</div>
+
+
+@code {
+    [Parameter]
+    public Todo Todo { get; set; }
+}
