@@ -1,0 +1,32 @@
+﻿@inject IAddNewTodoListService AddNewTodoListService
+
+<div class="row">
+    <div class="col">
+        <SfTextBox Placeholder="Add new list" @bind-Value="@ListName"></SfTextBox>
+    </div>
+    <div class="col-auto">
+        <SfButton Content="Add" IsPrimary="true" @onclick="AddNewTodoList"></SfButton>
+    </div>
+</div>
+
+
+@code {
+    private string ListName { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ListAdded { get; set; }
+
+    private void AddNewTodoList()
+    {
+        var added = AddNewTodoListService.Add(ListName);
+
+        if (added)
+        {
+            ListName = string.Empty;
+            ListAdded.InvokeAsync(true);
+        }
+
+        ListName = string.Empty;
+        ListAdded.InvokeAsync(false);
+    }
+}

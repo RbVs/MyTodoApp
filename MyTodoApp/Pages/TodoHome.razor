@@ -1,46 +1,50 @@
 ﻿@page "/todo-home"
-@using MyTodoApp.Models
-@using Syncfusion.Blazor.Grids
+@inject IRepository<TodoList> TodoListRepository
 
 <div class="row">
-    <div class="col-md-2">
-        <p>Listen</p>
+    <div class="col-md-3">
+        <p>My lists</p>
+
+        <AddNewList ListAdded="@RefreshList"></AddNewList>
+
+        @if (TodoLists == null)
+        {
+            <p>Loading...</p>
+        }
+        else
+        {
+            <SfListView DataSource="@TodoLists" CssClass="sflist">
+                <ListViewFieldSettings TValue="TodoList" Id="Ident" Text="Name"></ListViewFieldSettings>
+            </SfListView>
+        }
     </div>
     <div class="col-md-7">
-        <SfGrid DataSource="@Todos" AllowPaging="true" AllowFiltering="true" EnableHover="true">
-            <GridFilterSettings EnableCaseSensitivity="false"></GridFilterSettings>
-            <GridColumns>
-                <GridColumn Field="@nameof(Todo.Id)" HeaderText="Id"></GridColumn>
-                <GridColumn Field="@nameof(Todo.Description)" HeaderText="Description"></GridColumn>
-                <GridColumn Field="@nameof(Todo.DateAdded)" HeaderText="Date added"></GridColumn>
-                <GridColumn Field="@nameof(Todo.DueDate)" HeaderText="Due date"></GridColumn>
-                <GridColumn Field="@nameof(Todo.Priority)" HeaderText="Priority"></GridColumn>
-                <GridColumn Field="@nameof(Todo.IsClosed)" HeaderText="Offen" DisplayAsCheckBox="true"></GridColumn>
-            </GridColumns>
-        </SfGrid>
+        <p>My todos</p>
     </div>
-    <div class="col-md-3"></div>
+    <div class="col-md-2">
+        <p>maybe some options</p>
+    </div>
 </div>
 
 
 @code{
-    private List<Todo> Todos { get; } = new List<Todo>();
+    private List<TodoList> TodoLists { get; set; }
 
-    protected override void OnInitialized()
+    protected override Task OnInitializedAsync()
     {
-        for (var i = 1; i <= 100; i++)
-        {
-            Todos.Add(new Todo
-            {
-                Id = i,
-                Description = $"My Todo Nr. : {i}",
-                DateAdded = DateTime.Today.AddDays(-i),
-                DueDate = DateTime.Today.AddDays(i),
-                Priority = 1,
-                IsClosed = false
-            });
-        }
-        base.OnInitialized();
+        TodoLists = TodoListRepository.GetAll();
+        return base.OnInitializedAsync();
+    }
+
+    void RefreshList(bool added)
+    {
+        TodoLists = TodoListRepository.GetAll();
     }
 
 }
+
+<style>
+    .sflist{
+    margin: 10px 0px    
+    }
+</style>

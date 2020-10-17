@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MyTodoApp.Models;
+using MyTodoApp.Repository;
+using MyTodoApp.Services;
 using Syncfusion.Blazor;
 
 namespace MyTodoApp
@@ -22,6 +25,9 @@ namespace MyTodoApp
         {
             services.AddSyncfusionBlazor();
             services.AddRazorPages();
+            services.AddSingleton<ICachedData, CachedData>();
+            services.AddScoped<IRepository<TodoList>, TodoListsRepository>();
+            services.AddScoped<IAddNewTodoListService, AddNewTodoListService>();
             services.AddServerSideBlazor();
         }
 
