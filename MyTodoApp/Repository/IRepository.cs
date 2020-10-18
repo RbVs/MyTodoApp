@@ -7,5 +7,6 @@ namespace MyTodoApp.Repository
     {
         List<TodoList> GetAll();
         bool Add(T entity);
+        bool Delete(T entity);
     }
 }

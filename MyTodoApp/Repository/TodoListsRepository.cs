@@ -31,5 +31,18 @@ namespace MyTodoApp.Repository
                 return false;
             }
         }
+
+        public bool Delete(TodoList entity)
+        {
+            try
+            {
+                _cachedData.TodoLists.Remove(entity);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
     }
 }

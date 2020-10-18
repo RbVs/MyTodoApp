@@ -13,14 +13,17 @@
         }
         else
         {
-            <SfListView DataSource="@TodoLists" CssClass="sflist" @ref="_todoListView">
+            <SfListView DataSource="@TodoLists" CssClass="sflist" ID="todolistView">
                 <ListViewFieldSettings TValue="TodoList" Id="Ident" Text="Name"></ListViewFieldSettings>
+                <ListViewEvents TValue="TodoList" Clicked="@(e => SetSelectedItem(e))"> </ListViewEvents>
             </SfListView>
+            <SfContextMenu Target="#todolistView" Items="@MenuItems">
+            </SfContextMenu>
         }
     </div>
     <div class="col-md-7">
         <p>My todos</p>
-        <SfButton IsPrimary="true" @onclick="Delete">Delete selected List</SfButton>
+        <SfButton IsPrimary="true" @onclick="DeleteList">Delete selected List</SfButton>
     </div>
     <div class="col-md-2">
         <p>maybe some options</p>
@@ -30,27 +33,40 @@
 
 @code{
     private List<TodoList> TodoLists { get; set; }
-
-    SfListView<TodoList> _todoListView;
-
+    
+    public List<MenuItem> MenuItems = new List<MenuItem>
+    {
+        new MenuItem{ Text = "Edit",  },
+        new MenuItem{ Separator = true},
+        new MenuItem{ Text = "Delete" },
+    };
     protected override Task OnInitializedAsync()
     {
         TodoLists = TodoListRepository.GetAll();
         return base.OnInitializedAsync();
     }
 
-    void RefreshList(bool added)
+    void RefreshList(bool refresh)
     {
+        if (!refresh) return;
+
         TodoLists = TodoListRepository.GetAll();
     }
 
-    private async Task Delete()
+    private async Task DeleteList()
     {
-        var item = await _todoListView.GetSelectedItems();
-        var x = item.Data;
-        _todoListView.RemoveItems(x);
+        if(SelectedList == null) return;
+        
+        var deleted = TodoListRepository.Delete(SelectedList);
+        RefreshList(deleted);
     }
 
+    private TodoList SelectedList { get; set; }
+
+    private void SetSelectedItem(ClickEventArgs<TodoList> selectedList )
+    {
+        SelectedList = selectedList.ItemData;
+    }
 }
 
 <style>
