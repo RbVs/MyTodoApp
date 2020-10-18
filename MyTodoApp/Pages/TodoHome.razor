@@ -13,13 +13,14 @@
         }
         else
         {
-            <SfListView DataSource="@TodoLists" CssClass="sflist">
+            <SfListView DataSource="@TodoLists" CssClass="sflist" @ref="_todoListView">
                 <ListViewFieldSettings TValue="TodoList" Id="Ident" Text="Name"></ListViewFieldSettings>
             </SfListView>
         }
     </div>
     <div class="col-md-7">
         <p>My todos</p>
+        <SfButton IsPrimary="true" @onclick="Delete">Delete selected List</SfButton>
     </div>
     <div class="col-md-2">
         <p>maybe some options</p>
@@ -30,6 +31,8 @@
 @code{
     private List<TodoList> TodoLists { get; set; }
 
+    SfListView<TodoList> _todoListView;
+
     protected override Task OnInitializedAsync()
     {
         TodoLists = TodoListRepository.GetAll();
@@ -39,6 +42,13 @@
     void RefreshList(bool added)
     {
         TodoLists = TodoListRepository.GetAll();
+    }
+
+    private async Task Delete()
+    {
+        var item = await _todoListView.GetSelectedItems();
+        var x = item.Data;
+        _todoListView.RemoveItems(x);
     }
 
 }

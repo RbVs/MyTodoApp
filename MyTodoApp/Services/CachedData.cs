@@ -26,7 +26,18 @@ namespace MyTodoApp.Services
             {
                 Id = 1,
                 Ident = Guid.NewGuid().ToString(),
-                Name = "Home"
+                Name = "Home",
+                Todos = new List<Todo>
+                {
+                    new Todo
+                    {
+                        Id = 1
+                    },
+                    new Todo
+                    {
+                        Id = 2
+                    },
+                }
             };
             var l2 = new TodoList
             {
